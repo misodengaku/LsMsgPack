@@ -1,33 +1,37 @@
-﻿using LsMsgPack;
+using LsMsgPack;
 using System;
 using System.Collections.Generic;
 using System.IO;
 
-namespace MsgPackExplorer {
-  public class TestFileSuiteCreator {
+namespace MsgPackExplorer
+{
+    public class TestFileSuiteCreator
+    {
 
-    public void CreateSuite(string directory) {
-      if(!Directory.Exists(directory)) Directory.CreateDirectory(directory);
-      AllSmallTypes(directory);
-      SomeBadChoices(directory);
-      SlidingTackle(directory);
-      Example(directory);
-    }
+        public void CreateSuite(string directory)
+        {
+            if (!Directory.Exists(directory)) Directory.CreateDirectory(directory);
+            AllSmallTypes(directory);
+            SomeBadChoices(directory);
+            SlidingTackle(directory);
+            Example(directory);
+        }
 
-    public void AllSmallTypes(string directory) {
-      Dictionary<string, int> simpleMap = new Dictionary<string, int>();
-      simpleMap.Add("Black", 0);
-      simpleMap.Add("Brown", 1);
-      simpleMap.Add("Red", 2);
-      simpleMap.Add("Orange", 3);
-      simpleMap.Add("Yellow", 4);
-      simpleMap.Add("Green", 5);
-      simpleMap.Add("Blue", 6);
-      simpleMap.Add("Violet", 7);
-      simpleMap.Add("Gray", 8);
-      simpleMap.Add("White", 9);
+        public void AllSmallTypes(string directory)
+        {
+            Dictionary<string, int> simpleMap = new Dictionary<string, int>();
+            simpleMap.Add("Black", 0);
+            simpleMap.Add("Brown", 1);
+            simpleMap.Add("Red", 2);
+            simpleMap.Add("Orange", 3);
+            simpleMap.Add("Yellow", 4);
+            simpleMap.Add("Green", 5);
+            simpleMap.Add("Blue", 6);
+            simpleMap.Add("Violet", 7);
+            simpleMap.Add("Gray", 8);
+            simpleMap.Add("White", 9);
 
-      object[] items = new object[] {
+            object[] items = new object[] {
         "Null type:",
         null,
         "Bool types:",
@@ -89,11 +93,12 @@ namespace MsgPackExplorer {
         }
       };
 
-      File.WriteAllBytes(Path.Combine(directory, "AllSmallTypes.MsgPack"), MsgPackItem.Pack(items, true).ToBytes());
-    }
+            File.WriteAllBytes(Path.Combine(directory, "AllSmallTypes.MsgPack"), MsgPackItem.Pack(items, true).ToBytes());
+        }
 
-    public void SomeBadChoices(string directory) {
-      object[] items = new object[] {
+        public void SomeBadChoices(string directory)
+        {
+            object[] items = new object[] {
         "Wrongfully signed types",
         (sbyte)50,
         (int)128,
@@ -151,38 +156,42 @@ namespace MsgPackExplorer {
         (short)-32,
         (short)-128,
       };
-      
-      File.WriteAllBytes(Path.Combine(directory, "SomeBadChoices.MsgPack"), MsgPackItem.Pack(items, false).ToBytes());
-    }
 
-    public void SlidingTackle(string directory) {
-      KeyValuePair<object, object>[] items = new KeyValuePair<object, object>[] {
+            File.WriteAllBytes(Path.Combine(directory, "SomeBadChoices.MsgPack"), MsgPackItem.Pack(items, false).ToBytes());
+        }
+
+        public void SlidingTackle(string directory)
+        {
+            KeyValuePair<object, object>[] items = new KeyValuePair<object, object>[] {
         new KeyValuePair<object, object>(true,false),
         new KeyValuePair<object, object>(null,"Maps are quite flexible!"),
         new KeyValuePair<object, object>(true,"Double!"),
         new KeyValuePair<object, object>(new KeyValuePair<object,object>[0],new object[0]),
         new KeyValuePair<object, object>(new object[0],new KeyValuePair<object,object>[0])
       };
-      File.WriteAllBytes(Path.Combine(directory, "SlidingTackle.MsgPack"), MsgPackItem.Pack(items).ToBytes());
+            File.WriteAllBytes(Path.Combine(directory, "SlidingTackle.MsgPack"), MsgPackItem.Pack(items).ToBytes());
+        }
+
+        class MyClass
+        {
+            public string Name { get; set; }
+            public int Quantity { get; set; }
+            public List<object> Anything { get; set; }
+        }
+
+        public void Example(string directory)
+        {
+
+            MyClass message = new MyClass()
+            {
+                Name = "TestMessage",
+                Quantity = 35,
+                Anything = new List<object>(new object[] { "First", 2, false, null, 5.5d, "last", DateTime.Now })
+            };
+
+            byte[] bytes = MsgPackItem.Pack(message).ToBytes();
+
+            File.WriteAllBytes(Path.Combine(directory, "Example.MsgPack"), bytes);
+        }
     }
-
-    class MyClass {
-      public string Name { get; set; }
-      public int Quantity { get; set; }
-      public List<object> Anything { get; set; }
-    }
-
-    public void Example(string directory) {
-
-      MyClass message = new MyClass() {
-        Name = "TestMessage",
-        Quantity = 35,
-        Anything = new List<object>(new object[] { "First", 2, false, null, 5.5d, "last", DateTime.Now })
-      };
-
-      byte[] bytes = MsgPackItem.Pack(message).ToBytes();
-
-      File.WriteAllBytes(Path.Combine(directory, "Example.MsgPack"), bytes);
-    }
-  }
 }

@@ -1,4 +1,4 @@
-﻿namespace MsgPackExplorer {
+namespace MsgPackExplorer {
 	partial class PayloadMsgPackExplorer {
 		/// <summary>
 		/// Required designer variable.
