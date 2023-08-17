@@ -39,6 +39,9 @@ jobs:
       with:
         dotnet-version: 7.0.x
 
+    - name: Remove LsMsgPackFiddlerInspector from build target
+      run: dotnet sln remove LsMsgPackFiddlerInspector/LsMsgPackFiddlerInspector.csproj
+
     - name: Restore
       run: dotnet restore
 
