@@ -34,6 +34,7 @@ namespace LsMsgPackFiddlerInspector
             base.ShowAboutBox();
         }
 
+        [SupportedOSPlatform("windows")]
         public override void AddToTab(TabPage o)
         {
             Image img = explorer.GetIcon();
