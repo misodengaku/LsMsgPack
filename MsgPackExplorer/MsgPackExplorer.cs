@@ -113,50 +113,57 @@ namespace MsgPackExplorer {
       treeView1.BeginUpdate();
       richTextBox1.SuspendLayout();
       Cursor = Cursors.WaitCursor;
-      try {
-        treeView1.Nodes.Clear();
-        richTextBox1.Clear();
-        lineairList.Clear();
-        listView1.Items.Clear();
-        if (ReferenceEquals(item, null)) return;
+            try
+            {
+                treeView1.Nodes.Clear();
+                richTextBox1.Clear();
+                lineairList.Clear();
+                listView1.Items.Clear();
+                if (ReferenceEquals(item, null)) return;
 
-        TreeNode root = GetTreeNodeFor(item);
-        _nodeCount = 0;
-        Traverse(root, item);
-        if (_nodeCount > _displayLimit)
-          root.Nodes.Add(string.Concat("Limit of ", _displayLimit, " displayed items reached..."));
+                TreeNode root = GetTreeNodeFor(item);
+                _nodeCount = 0;
+                Traverse(root, item);
+                if (_nodeCount > _displayLimit)
+                    root.Nodes.Add(string.Concat("Limit of ", _displayLimit, " displayed items reached..."));
 
-        treeView1.Nodes.Add(root);
-        treeView1.ExpandAll();
-        if (ReferenceEquals(data, null) || data.Length == 0) data = item.ToBytes();
-        //richTextBox1.Text = BitConverter.ToString(data).Replace('-', ' ');
+                treeView1.Nodes.Add(root);
+                treeView1.ExpandAll();
+                if (ReferenceEquals(data, null) || data.Length == 0) data = item.ToBytes();
+                //richTextBox1.Text = BitConverter.ToString(data).Replace('-', ' ');
 
-        string[] hex = BitConverter.ToString(data).Split('-');
-        StringBuilder sb = new StringBuilder("{\\rtf1 {\\colortbl ;\\red255\\green0\\blue0;\\red0\\green77\\blue187;\\red127\\green127\\blue127;}\r\n");
-        int byteOffset = 0;
+                string[] hex = BitConverter.ToString(data).Split('-');
+                StringBuilder sb = new StringBuilder("{\\rtf1 {\\colortbl ;\\red255\\green0\\blue0;\\red0\\green77\\blue187;\\red127\\green127\\blue127;}\r\n");
+                int byteOffset = 0;
 
-        EditorMetaData meta = null;
-        byteOffset = AddParts(hex, root, byteOffset, sb, ref meta);
+                EditorMetaData meta = null;
+                byteOffset = AddParts(hex, root, byteOffset, sb, ref meta);
 
-        if (!ReferenceEquals(meta, null) && !ReferenceEquals(meta.Item, null)) {
-          while (meta.Item.StoredOffset + meta.Item.StoredLength > byteOffset) {
-            sb.Append(hex[byteOffset]).Append(' ');
-            byteOffset++;
-            meta.Length++;
-          }
-        }
+                if (!ReferenceEquals(meta, null) && !ReferenceEquals(meta.Item, null))
+                {
+                    while (meta.Item.StoredOffset + meta.Item.StoredLength > byteOffset)
+                    {
+                        sb.Append(hex[byteOffset]).Append(' ');
+                        byteOffset++;
+                        meta.Length++;
+                    }
+                }
 
-        meta = (EditorMetaData)item.Tag;
-        meta.Length = byteOffset;
+                meta = (EditorMetaData)item.Tag;
+                meta.Length = byteOffset;
 
-        if (hex.Length - 1 > byteOffset) sb.Append("\\cf3 "); // gray
-        while (hex.Length - 1 > byteOffset) {
-          sb.Append(hex[byteOffset]).Append(' ');
-          byteOffset++;
-        }
+                if (hex.Length - 1 > byteOffset) sb.Append("\\cf3 "); // gray
+                while (hex.Length - 1 > byteOffset)
+                {
+                    sb.Append(hex[byteOffset]).Append(' ');
+                    byteOffset++;
+                }
 
-        sb.Append("\r\n}\r\n");
-        richTextBox1.Rtf = sb.ToString();
+                sb.Append("\r\n}\r\n");
+                richTextBox1.Rtf = sb.ToString();
+            } catch (System.OutOfMemoryException e) {
+                MessageBox.Show("out of memory");
+            
       } finally {
         ResumeLayout();
         treeView1.EndUpdate();

@@ -2,6 +2,7 @@
 using System;
 using System.Windows.Forms;
 using System.Linq;
+using System.IO;
 
 namespace MsgPackExplorer {
   public partial class Explorer: Form {
@@ -19,7 +20,7 @@ namespace MsgPackExplorer {
 
     private void btnOpen_Click(object sender, EventArgs e) {
       if(openFileDialog1.ShowDialog() == DialogResult.OK) {
-        msgPackExplorer1.Data = System.IO.File.ReadAllBytes(openFileDialog1.FileName);
+                openFile(openFileDialog1.FileName);
       }
     }
 
@@ -69,10 +70,40 @@ namespace MsgPackExplorer {
       } catch(Exception ex) {
         MessageBox.Show(string.Concat("Inastallation failed with the following message:\r\n", ex.Message,"\r\n\r\nYou may have more luck (depending on the error) running with administration privileges.") , "Not installed", MessageBoxButtons.OK, MessageBoxIcon.Error);
       }
-    }
-  }
+        }
+        private void Explorer_DragOver(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+            {
+                e.Effect = DragDropEffects.Copy;
+            }
+            else
+            {
+                   e.Effect= DragDropEffects.None;
+            }
+        }
 
-  public class EndianChoice {
+        private void Explorer_DragDrop(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+            {
+                var files = (string[])e.Data.GetData(DataFormats.FileDrop);
+                openFile(files[0]);
+            }
+        }
+
+        private void openFile(string path)
+        {
+            if (! File.Exists(path) || File.GetAttributes(path).HasFlag(FileAttributes.Directory)) {
+                return;
+            }
+            msgPackExplorer1.Data = System.IO.File.ReadAllBytes(path);
+            Text = openFileDialog1.FileName + " - MsgPack Explorer";
+        }
+
+    }
+
+    public class EndianChoice {
     public EndianChoice(EndianAction value, string description) {
       Value = value;
       Description = description;
