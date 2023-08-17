@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
 using LsMsgPack;
@@ -480,14 +480,16 @@ namespace MsgPackExplorer {
       listView1.Items.Add(lvi);
     }
 
-    private bool PopulateContextMenu(Object objClicked) {
-      bool rv = false;
-      if (objClicked is TreeNode) {
-        contextMenu.MenuItems.Clear();
-        contextMenu.MenuItems.Add(new MenuItem("Save payload as...", new System.EventHandler(this.onSavePayloadClick)));
-        contextMenu.MenuItems.Add(new MenuItem("Parse payload as MessagePack", new System.EventHandler(this.onParseAsMsgPackClick)));
-        rv = true;
-      }
+        private bool PopulateContextMenu(Object objClicked)
+        {
+            bool rv = false;
+            if (objClicked is TreeNode)
+            {
+                contextMenu.Items.Clear();
+                contextMenu.Items.Add("Save payload as...", null, new System.EventHandler(this.onSavePayloadClick));
+                contextMenu.Items.Add("Parse payload as MessagePack",null, new System.EventHandler(this.onParseAsMsgPackClick));
+                rv = true;
+            }
 
       return rv;
     }

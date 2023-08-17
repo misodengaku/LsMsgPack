@@ -1,4 +1,4 @@
-﻿namespace MsgPackExplorer {
+namespace MsgPackExplorer {
   partial class LsMsgPackExplorer {
     /// <summary> 
     /// Required designer variable.
@@ -51,7 +51,7 @@
       this.statusStrip1.SuspendLayout();
       this.panel2.SuspendLayout();
       this.panel3.SuspendLayout();
-      this.contextMenu = new System.Windows.Forms.ContextMenu();
+      this.contextMenu = new System.Windows.Forms.ContextMenuStrip();
       this.SuspendLayout();
       // 
       // treeView1
@@ -299,6 +299,6 @@
     private System.Windows.Forms.Panel panel3;
     private System.Windows.Forms.Splitter splitter4;
     private System.Windows.Forms.TextBox errorDetails;
-    private System.Windows.Forms.ContextMenu contextMenu;
+    private System.Windows.Forms.ContextMenuStrip contextMenu;
   }
 }
