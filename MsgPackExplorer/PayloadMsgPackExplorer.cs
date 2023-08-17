@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -8,11 +8,14 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace MsgPackExplorer {
-	public partial class PayloadMsgPackExplorer : Form {
-		public PayloadMsgPackExplorer(byte[] data) {
-			InitializeComponent();
-			msgPackExplorer1.Data = data;
-		}
-	}
+namespace MsgPackExplorer
+{
+    public partial class PayloadMsgPackExplorer : Form
+    {
+        public PayloadMsgPackExplorer(byte[] data)
+        {
+            InitializeComponent();
+            msgPackExplorer1.Data = data;
+        }
+    }
 }

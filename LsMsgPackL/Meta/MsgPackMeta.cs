@@ -1,37 +1,42 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 
-namespace LsMsgPack {
-  public static class MsgPackMeta {
+namespace LsMsgPack
+{
+    public static class MsgPackMeta
+    {
 
-    public static readonly PackDef[] AllPacks;
-    public static readonly Dictionary<MsgPackTypeId, PackDef> FromTypeId;
-    public static readonly Dictionary<string, PackDef> FromName;
+        public static readonly PackDef[] AllPacks;
+        public static readonly Dictionary<MsgPackTypeId, PackDef> FromTypeId;
+        public static readonly Dictionary<string, PackDef> FromName;
 
-    public class PackDef {
-      public PackDef(MsgPackTypeId typeId, string officialName, string description) {
-        OfficialName = officialName;
-        Description = description;
-        TypeId = typeId;
-      }
-      public string OfficialName;
-      public string Description;
-      public MsgPackTypeId TypeId;
-    }
+        public class PackDef
+        {
+            public PackDef(MsgPackTypeId typeId, string officialName, string description)
+            {
+                OfficialName = officialName;
+                Description = description;
+                TypeId = typeId;
+            }
+            public string OfficialName;
+            public string Description;
+            public MsgPackTypeId TypeId;
+        }
 
-    public static readonly MsgPackTypeId[] IntTypeFamily;
-    public static readonly MsgPackTypeId[] StrTypeFamily;
-    public static readonly MsgPackTypeId[] BoolTypeFamily;
-    public static readonly MsgPackTypeId[] FloatTypeFamily;
-    public static readonly MsgPackTypeId[] BinTypeFamily;
-    public static readonly MsgPackTypeId[] ArrayTypeFamily;
-    public static readonly MsgPackTypeId[] MapTypeFamily;
-    public static readonly MsgPackTypeId[] ExtTypeFamily;
+        public static readonly MsgPackTypeId[] IntTypeFamily;
+        public static readonly MsgPackTypeId[] StrTypeFamily;
+        public static readonly MsgPackTypeId[] BoolTypeFamily;
+        public static readonly MsgPackTypeId[] FloatTypeFamily;
+        public static readonly MsgPackTypeId[] BinTypeFamily;
+        public static readonly MsgPackTypeId[] ArrayTypeFamily;
+        public static readonly MsgPackTypeId[] MapTypeFamily;
+        public static readonly MsgPackTypeId[] ExtTypeFamily;
 
-    private static readonly MsgPackTypeId[][] typeFamilys;
+        private static readonly MsgPackTypeId[][] typeFamilys;
 
-    static MsgPackMeta() {
-      AllPacks = new PackDef[] {
+        static MsgPackMeta()
+        {
+            AllPacks = new PackDef[] {
        new PackDef(MsgPackTypeId.MpNull,     "nil", "Unassigned (null) value"),
 
        new PackDef(MsgPackTypeId.MpBoolFalse,"false","Boolean false"),
@@ -81,12 +86,12 @@ namespace LsMsgPack {
        new PackDef(MsgPackTypeId.NeverUsed,  "(never used)", "a specific value that is explicitally not allowed to be used according to the specifications")
       };
 
-      FromTypeId = new Dictionary<MsgPackTypeId, PackDef>(AllPacks.Length);
-      for(int t = AllPacks.Length - 1; t >= 0; t--) FromTypeId.Add(AllPacks[t].TypeId, AllPacks[t]);
-      FromName = new Dictionary<string, PackDef>(AllPacks.Length);
-      for(int t = AllPacks.Length - 1; t >= 0; t--) FromName.Add(AllPacks[t].OfficialName, AllPacks[t]);
+            FromTypeId = new Dictionary<MsgPackTypeId, PackDef>(AllPacks.Length);
+            for (int t = AllPacks.Length - 1; t >= 0; t--) FromTypeId.Add(AllPacks[t].TypeId, AllPacks[t]);
+            FromName = new Dictionary<string, PackDef>(AllPacks.Length);
+            for (int t = AllPacks.Length - 1; t >= 0; t--) FromName.Add(AllPacks[t].OfficialName, AllPacks[t]);
 
-      IntTypeFamily = new MsgPackTypeId[]{
+            IntTypeFamily = new MsgPackTypeId[]{
           MsgPackTypeId.MpBytePart,
           MsgPackTypeId.MpSBytePart,
           MsgPackTypeId.MpUByte,
@@ -98,36 +103,36 @@ namespace LsMsgPack {
           MsgPackTypeId.MpInt,
           MsgPackTypeId.MpLong,
         };
-      StrTypeFamily = new MsgPackTypeId[] {
+            StrTypeFamily = new MsgPackTypeId[] {
           MsgPackTypeId.MpStr5,
           MsgPackTypeId.MpStr8,
           MsgPackTypeId.MpStr16,
           MsgPackTypeId.MpStr32
         };
-      BoolTypeFamily = new MsgPackTypeId[]{
+            BoolTypeFamily = new MsgPackTypeId[]{
         MsgPackTypeId.MpBoolFalse,
           MsgPackTypeId.MpBoolTrue
         };
-      FloatTypeFamily = new MsgPackTypeId[] {
+            FloatTypeFamily = new MsgPackTypeId[] {
           MsgPackTypeId.MpFloat,
           MsgPackTypeId.MpDouble
         };
-      BinTypeFamily = new MsgPackTypeId[] {
+            BinTypeFamily = new MsgPackTypeId[] {
           MsgPackTypeId.MpBin8,
           MsgPackTypeId.MpBin16,
           MsgPackTypeId.MpBin32
         };
-      ArrayTypeFamily = new MsgPackTypeId[] {
+            ArrayTypeFamily = new MsgPackTypeId[] {
           MsgPackTypeId.MpArray4,
           MsgPackTypeId.MpArray16,
           MsgPackTypeId.MpArray32
         };
-      MapTypeFamily = new MsgPackTypeId[] {
+            MapTypeFamily = new MsgPackTypeId[] {
           MsgPackTypeId.MpMap4,
           MsgPackTypeId.MpMap16,
           MsgPackTypeId.MpMap32
         };
-      ExtTypeFamily = new MsgPackTypeId[] {
+            ExtTypeFamily = new MsgPackTypeId[] {
           MsgPackTypeId.MpFExt1,
           MsgPackTypeId.MpFExt2,
           MsgPackTypeId.MpFExt4,
@@ -138,7 +143,7 @@ namespace LsMsgPack {
           MsgPackTypeId.MpExt32
         };
 
-      typeFamilys = new MsgPackTypeId[][] {
+            typeFamilys = new MsgPackTypeId[][] {
         BoolTypeFamily,
         IntTypeFamily,
         FloatTypeFamily,
@@ -148,16 +153,18 @@ namespace LsMsgPack {
         MapTypeFamily,
         ExtTypeFamily
       };
-    }
+        }
 
-    public static bool AreInSameFamily(MsgPackTypeId a, MsgPackTypeId b, bool NullIsEqual = true) {
-      if(a == b) return true;
-      if(a == MsgPackTypeId.MpNull || b == MsgPackTypeId.MpNull) return NullIsEqual;
-      for(int t = typeFamilys.GetLength(0) - 1; t >= 0; t--) {
-        if(typeFamilys[t].Contains(a)) return typeFamilys[t].Contains(b);
-      }
-      return false;
-    }
+        public static bool AreInSameFamily(MsgPackTypeId a, MsgPackTypeId b, bool NullIsEqual = true)
+        {
+            if (a == b) return true;
+            if (a == MsgPackTypeId.MpNull || b == MsgPackTypeId.MpNull) return NullIsEqual;
+            for (int t = typeFamilys.GetLength(0) - 1; t >= 0; t--)
+            {
+                if (typeFamilys[t].Contains(a)) return typeFamilys[t].Contains(b);
+            }
+            return false;
+        }
 
-  }
+    }
 }

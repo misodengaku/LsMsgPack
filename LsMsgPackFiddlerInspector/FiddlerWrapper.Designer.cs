@@ -1,4 +1,4 @@
-﻿namespace LsMsgPackFiddlerInspector {
+namespace LsMsgPackFiddlerInspector {
   partial class FiddlerWrapper {
     /// <summary> 
     /// Required designer variable.

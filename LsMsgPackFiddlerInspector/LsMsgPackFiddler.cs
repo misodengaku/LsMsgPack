@@ -1,4 +1,4 @@
-﻿using Fiddler;
+using Fiddler;
 using MsgPackExplorer;
 using System.Drawing;
 using System.Runtime.Versioning;
@@ -34,7 +34,6 @@ namespace LsMsgPackFiddlerInspector
             base.ShowAboutBox();
         }
 
-        [SupportedOSPlatform("windows")]
         public override void AddToTab(TabPage o)
         {
             Image img = explorer.GetIcon();
@@ -86,6 +85,7 @@ namespace LsMsgPackFiddlerInspector
             get { return _readonly; }
             set { _readonly = value; }
         }
+
 
     }
 }
